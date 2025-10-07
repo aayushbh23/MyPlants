@@ -28,6 +28,19 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Catalog" asp-action="Index">Catalog</a>
                         </li>
                     </ul>
+
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link btn btn-outline-success" asp-controller="Cart" asp-action="Index">
+                                Cart (@{
+                                    var count = Context.Session.GetString("CartItems") != null ?
+                                        System.Text.Json.JsonSerializer.Deserialize<List<PlantsCatalog.Models.CartItem>>(Context.Session.GetString("CartItems")).Count : 0;
+                                    @count;
+                                })
+                            </a>
+                        </li>
+                    </ul>
+
                 </div>
             </div>
         </nav>

@@ -1,0 +1,10 @@
+@model int
+@{
+    ViewData["Title"] = "Not Found";
+    Layout = "_Layout";
+}
+<h2>Oops — item not found</h2>
+<p>We couldn’t find a product with ID <strong>@Model</strong>.</p>
+<p>
+    <a class="btn btn-secondary" asp-controller="Catalog" asp-action="Index">Back to Catalogue</a>
+</p>

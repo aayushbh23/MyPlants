@@ -152,7 +152,8 @@ namespace PlantsCatalog.Controllers
             var _plant = _service.GetById(id);
             if (_plant == null)
             {
-                return NotFound();  // handle invalid id
+                Response.StatusCode = 404;
+                return View("NotFound", id);
             }
             return View(_plant);
         }

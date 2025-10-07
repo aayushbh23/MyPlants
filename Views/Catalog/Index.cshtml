@@ -117,7 +117,7 @@ else
 
 @if ((Model?.TotalCount ?? 0) > (Model?.PageSize ?? 0))
 {
-    <nav aria-label="Catalog pagination" class="mt-4">
+    <nav aria-label="Catalog pagination" class="pagination-success mt-4">
         <ul class="pagination justify-content-center">
             <li class="page-item @(Model!.Page <= 1 ? "disabled" : "")">
                 <a class="page-link"

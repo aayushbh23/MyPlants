@@ -54,3 +54,15 @@ body {
 .page-item.active .page-link {
     z-index: 0;
 }
+
+.pagination-success .page-link {
+    color: #198754;
+    border-color: #198754;
+}
+
+.pagination-success .page-link:hover,
+.pagination-success .page-item.active .page-link {
+    background-color: #198754;
+    color: #fff;
+    border-color: #198754;
+}

@@ -1,8 +1,8 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using MyPlants.Models;
+using PlantsCatalog.Models;
 
-namespace MyPlants.Controllers
+namespace PlantsCatalog.Controllers
 {
     public class HomeController : Controller
     {

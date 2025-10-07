@@ -48,9 +48,14 @@ builder.Services.AddDbContext<PlantsCatalogDBContext>(opts =>
 // });
 
 
+builder.Services.AddDistributedMemoryCache();  // needed for session
+builder.Services.AddSession();                // register session services
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpsRedirection(o => o.HttpsPort = 5001);
+
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddScoped<ICartService, SessionCartService>();
 builder.Services.AddScoped<IPlantService, EfPlantService>();
 
 var app = builder.Build();
@@ -65,6 +70,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseSession();
 
 app.UseAuthorization();
 

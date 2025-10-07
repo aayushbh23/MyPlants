@@ -1,4 +1,4 @@
-namespace MyPlants.Models
+namespace PlantsCatalog.Models
 {
     public class ErrorViewModel
     {

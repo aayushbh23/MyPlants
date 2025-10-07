@@ -146,5 +146,15 @@ namespace PlantsCatalog.Controllers
 
             return View(vm);
         }
+
+        public IActionResult Details(int id)
+        {
+            var _plant = _service.GetById(id);
+            if (_plant == null)
+            {
+                return NotFound();  // handle invalid id
+            }
+            return View(_plant);
+        }
     }
 }

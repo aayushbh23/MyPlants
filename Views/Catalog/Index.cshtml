@@ -59,7 +59,7 @@
 }
 else
 {
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3">
+    <!-- <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3">
         @foreach (var p in Model.Items)
         {
             <div class="col">
@@ -74,7 +74,40 @@ else
                     </div>
                     <div class="card-footer d-flex justify-content-between align-items-center">
                         <strong class="text-success">@p.Price.ToString("C")</strong>
-                        <a class="btn btn-sm btn-outline-success disabled">Add</a>
+                        <a class="btn btn-sm btn-outline-success">Add</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div> -->
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3">
+        @foreach (var p in Model.Items)
+        {
+            <div class="col">
+                <div class="card h-100 border-success">
+                    <a asp-controller="Catalog" asp-action="Details" asp-route-id="@p.Id" class="text-decoration-none text-reset">
+                        <img class="card-img-top"
+                             src="~/images/@p.ImageFile"
+                             alt="@p.Name"
+                             style="height:200px;object-fit:scale-down;" />
+                        <div class="card-body">
+                            <h5 class="card-title">@p.Name</h5>
+                            <p class="card-text text-muted">@p.Description</p>
+                        </div>
+                    </a>
+
+                    <div class="card-footer d-flex justify-content-between align-items-center">
+                        <strong class="text-success">@p.Price.ToString("C")</strong>
+
+                        <!-- Add to Cart posts to Cart/Add -->
+                        <form asp-controller="Cart" asp-action="Add" method="post" class="m-0">
+                            <input type="hidden" name="id" value="@p.Id" />
+                            <input type="hidden" id="qty" name="quantity" value="1" />
+                            <button type="submit" class="btn btn-sm btn-outline-success">
+                                Add to Cart
+                            </button>
+                        </form>
+
                     </div>
                 </div>
             </div>
@@ -92,7 +125,7 @@ else
                    asp-route-page="@(Model.Page - 1)"
                    asp-route-pageSize="@Model.PageSize"
                    asp-route-search="@searchTerm"
-                   asp-route-category="@currentCategory">Previous</a>
+                   asp-route-category="@currentCategory">← Prev</a>
             </li>
 
             @for (int i = 1; i <= totalPages; i++)
@@ -113,7 +146,7 @@ else
                    asp-route-page="@(Model.Page + 1)"
                    asp-route-pageSize="@Model.PageSize"
                    asp-route-search="@searchTerm"
-                   asp-route-category="@currentCategory">Next</a>
+                   asp-route-category="@currentCategory">Next →</a>
             </li>
         </ul>
     </nav>

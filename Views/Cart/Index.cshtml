@@ -1,0 +1,55 @@
+@model IList<PlantsCatalog.Models.CartItem>
+@{
+    ViewData["Title"] = "Shopping Cart";
+}
+<h2>Your Shopping Cart</h2>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Message"]
+    </div>
+}
+
+@if (Model.Count == 0)
+{
+    <p>Your cart is empty.</p>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Product</th><th>Price</th><th>Quantity</th><th>Line Total</th><th>Remove</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@string.Format("{0:C}", item.Price)</td>
+                <td>@item.Quantity</td>
+                <td>@string.Format("{0:C}", item.LineTotal)</td>
+                <td>
+                    <!-- <a asp-action="Remove" asp-route-id="@item.ProductId" class="btn btn-danger btn-sm">Delete</a> -->
+                    <form asp-controller="Cart" asp-action="Remove" method="post" class="d-inline m-0">
+                      <input type="hidden" name="productId" value="@item.ProductId" />
+                      <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3" class="text-end"><strong>Total:</strong></td>
+                <td colspan="2"><strong>@string.Format("{0:C}", ViewData["CartTotal"])</strong></td>
+            </tr>
+        </tfoot>
+    </table>
+    <p>
+        <a asp-controller="Catalog" asp-action="Index" class="btn btn-secondary">← Continue Shopping</a>
+        <a asp-action="Checkout" class="btn btn-success">Checkout</a>
+    </p>
+}

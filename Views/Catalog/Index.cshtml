@@ -1,58 +1,119 @@
-﻿@model PlantsCatalog.Models.CatalogViewModel
+@model PlantsCatalog.Models.CatalogViewModel
 @{
     ViewData["Title"] = "Catalog";
+    var currentCategory = ViewBag.Category as string;
+    var searchTerm = Model?.Q ?? string.Empty;
+    var totalPages = (int)Math.Ceiling((double)(Model?.TotalCount ?? 0) / (Model?.PageSize ?? 1));
+    if (totalPages < 1) { totalPages = 1; }
 }
+
 <h1 class="mb-3">Catalog</h1>
 
-<form method="get" class="row gy-2 gx-2 align-items-center mb-3">
-    <div class="col-sm-8 col-md-6">
-        <input type="text" class="form-control" name="q" value="@Model.Q" placeholder="Search plants..." />
+<form asp-action="Index" method="get" class="row gy-2 gx-2 align-items-end mb-3">
+    <div class="col-sm-6 col-md-5">
+        <label for="search" class="form-label">Search</label>
+        <input id="search"
+               type="text"
+               class="form-control"
+               name="search"
+               value="@searchTerm"
+               placeholder="Search plants..." />
     </div>
+
+    <div class="col-sm-6 col-md-4">
+        <label for="category" class="form-label">Category</label>
+        @await Component.InvokeAsync("CategoryMenu", new { selected = currentCategory })
+    </div>
+
     <div class="col-auto">
-        <button class="btn btn-success" type="submit">Search</button>
-        @if (!string.IsNullOrWhiteSpace(Model.Q))
+        <button class="btn btn-success" type="submit">Apply</button>
+        @if (!string.IsNullOrWhiteSpace(searchTerm))
         {
-            <a class="btn btn-outline-light ms-2" asp-action="Index">Clear</a>
+            if (!string.IsNullOrWhiteSpace(currentCategory))
+            {
+                <a class="btn btn-outline-dark ms-2"
+                   asp-action="Index"
+                   asp-route-category="@currentCategory">Clear</a>
+            }
+            else
+            {
+                <a class="btn btn-outline-dark ms-2" asp-action="Index">Clear</a>
+            }
         }
     </div>
 </form>
 
-<div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3">
-    @foreach (var p in Model.Items)
-    {
-        <div class="col">
-            <div class="card h-100 border-success">
-                <img class="card-img-top" src="~/images/@p.ImageFile" alt="@p.Name" style="height:200px;object-fit:scale-down;">
-                <div class="card-body">
-                    <h5 class="card-title">@p.Name</h5>
-                    <p class="card-text text-muted">@p.Description</p>
-                </div>
-                <div class="card-footer d-flex justify-content-between align-items-center">
-                    <strong class="text-success">@p.Price.ToString("C")</strong>
-                    <a class="btn btn-sm btn-outline-success disabled">Add</a>
+@if (Model == null || Model.Items == null || !Model.Items.Any())
+{
+    <div class="alert alert-warning">
+        No plants found.
+        @if (!string.IsNullOrWhiteSpace(searchTerm))
+        {
+            @: Try adjusting your search.
+        }
+        @if (!string.IsNullOrWhiteSpace(currentCategory))
+        {
+            @: (Category: @currentCategory)
+        }
+    </div>
+}
+else
+{
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3">
+        @foreach (var p in Model.Items)
+        {
+            <div class="col">
+                <div class="card h-100 border-success">
+                    <img class="card-img-top"
+                         src="~/images/@p.ImageFile"
+                         alt="@p.Name"
+                         style="height:200px;object-fit:scale-down;">
+                    <div class="card-body">
+                        <h5 class="card-title">@p.Name</h5>
+                        <p class="card-text text-muted">@p.Description</p>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between align-items-center">
+                        <strong class="text-success">@p.Price.ToString("C")</strong>
+                        <a class="btn btn-sm btn-outline-success disabled">Add</a>
+                    </div>
                 </div>
             </div>
-        </div>
-    }
-</div>
+        }
+    </div>
+}
 
-@if (Model.TotalPages > 1)
+@if ((Model?.TotalCount ?? 0) > (Model?.PageSize ?? 0))
 {
     <nav aria-label="Catalog pagination" class="mt-4">
         <ul class="pagination justify-content-center">
-            <li class="page-item @(Model.Page == 1 ? "disabled" : "")">
-                <a class="page-link" asp-action="Index" asp-route-q="@Model.Q" asp-route-page="@(Model.Page - 1)" asp-route-pageSize="@Model.PageSize">Previous</a>
+            <li class="page-item @(Model!.Page <= 1 ? "disabled" : "")">
+                <a class="page-link"
+                   asp-action="Index"
+                   asp-route-page="@(Model.Page - 1)"
+                   asp-route-pageSize="@Model.PageSize"
+                   asp-route-search="@searchTerm"
+                   asp-route-category="@currentCategory">Previous</a>
             </li>
 
-            @for (int i = 1; i <= Model.TotalPages; i++)
+            @for (int i = 1; i <= totalPages; i++)
             {
                 <li class="page-item @(i == Model.Page ? "active" : "")">
-                    <a class="page-link" asp-action="Index" asp-route-q="@Model.Q" asp-route-page="@i" asp-route-pageSize="@Model.PageSize">@i</a>
+                    <a class="page-link"
+                       asp-action="Index"
+                       asp-route-page="@i"
+                       asp-route-pageSize="@Model.PageSize"
+                       asp-route-search="@searchTerm"
+                       asp-route-category="@currentCategory">@i</a>
                 </li>
             }
 
-            <li class="page-item @(Model.Page == Model.TotalPages ? "disabled" : "")">
-                <a class="page-link" asp-action="Index" asp-route-q="@Model.Q" asp-route-page="@(Model.Page + 1)" asp-route-pageSize="@Model.PageSize">Next</a>
+            <li class="page-item @(Model.Page >= totalPages ? "disabled" : "")">
+                <a class="page-link"
+                   asp-action="Index"
+                   asp-route-page="@(Model.Page + 1)"
+                   asp-route-pageSize="@Model.PageSize"
+                   asp-route-search="@searchTerm"
+                   asp-route-category="@currentCategory">Next</a>
             </li>
         </ul>
     </nav>

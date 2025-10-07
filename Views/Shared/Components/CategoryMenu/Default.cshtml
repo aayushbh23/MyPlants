@@ -1,0 +1,33 @@
+@using System.Linq
+@model IEnumerable<string>
+@{
+    var selected = (ViewBag.SelectedCategory as string)?.Trim();
+    var ordered = (Model ?? Enumerable.Empty<string>()).OrderBy(c => c);
+}
+
+<select id="category" name="category" class="form-select">
+    @* All plants option *@
+    @if (string.IsNullOrWhiteSpace(selected))
+    {
+        <option value="" selected>All plants</option>
+    }
+    else
+    {
+        <option value="">All plants</option>
+    }
+
+    @* Category options *@
+    @foreach (var cat in ordered)
+    {
+        var isSel = !string.IsNullOrWhiteSpace(selected) &&
+                    string.Equals(cat, selected, StringComparison.InvariantCultureIgnoreCase);
+        if (isSel)
+        {
+            <option value="@cat" selected>@cat</option>
+        }
+        else
+        {
+            <option value="@cat">@cat</option>
+        }
+    }
+</select>

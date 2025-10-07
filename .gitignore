@@ -60,3 +60,6 @@ nunit-*.xml
 # Ignore build file
 bin/*
 obj/*
+
+# Database file
+MyPlants.db

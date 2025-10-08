@@ -18,18 +18,16 @@ namespace PlantsCatalog.Services
 
         public void AddItem(int productId, int quantity)
         {
-            var cart = GetCartItems();  // load current cart from session
-            // Check if item already in cart
+            var cart = GetCartItems();
             var existing = cart.FirstOrDefault(ci => ci.ProductId == productId);
             if (existing != null)
             {
-                existing.Quantity += quantity;  // increase quantity
+                existing.Quantity += quantity;
             }
             else
             {
-                // Fetch product details to add new item
                 var product = _plantService.GetById(productId);
-                if (product == null) return; // invalid product id
+                if (product == null) return;
 
                 cart.Add(new CartItem {
                     ProductId = product.Id,
@@ -58,16 +56,12 @@ namespace PlantsCatalog.Services
             {
                 return new List<CartItem>();
             }
-            // Deserialize JSON to List<CartItem>
             return JsonSerializer.Deserialize<List<CartItem>>(cartJson) ?? new List<CartItem>();
         }
-
         public void ClearCart()
         {
-            SaveCart(new List<CartItem>());  // replace with empty list
+            SaveCart(new List<CartItem>());
         }
-
-        // Helper to save the cart list into session as JSON
         private void SaveCart(List<CartItem> cart)
         {
             var session = _httpContextAccessor.HttpContext?.Session;

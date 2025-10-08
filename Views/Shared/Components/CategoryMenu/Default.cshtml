@@ -6,7 +6,6 @@
 }
 
 <select id="category" name="category" class="form-select">
-    @* All plants option *@
     @if (string.IsNullOrWhiteSpace(selected))
     {
         <option value="" selected>All plants</option>
@@ -15,8 +14,6 @@
     {
         <option value="">All plants</option>
     }
-
-    @* Category options *@
     @foreach (var cat in ordered)
     {
         var isSel = !string.IsNullOrWhiteSpace(selected) &&

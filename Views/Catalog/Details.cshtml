@@ -16,8 +16,6 @@
             <p><strong>Description:</strong> @Model.Description</p>
             <p><strong>Category:</strong> @Model.Category</p>
         </div>
-
-        <!-- Add to Cart Form -->
         <form asp-controller="Cart" asp-action="Add" method="post" class="add-to-cart-form d-flex justify-content-center align-items-center gap-2">
             <input type="hidden" name="id" value="@Model.Id" />
             <label for="qty" class="me-1">Quantity:</label>

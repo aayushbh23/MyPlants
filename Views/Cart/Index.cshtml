@@ -33,7 +33,6 @@ else
                 <td>@item.Quantity</td>
                 <td>@string.Format("{0:C}", item.LineTotal)</td>
                 <td>
-                    <!-- <a asp-action="Remove" asp-route-id="@item.ProductId" class="btn btn-danger btn-sm">Delete</a> -->
                     <form asp-controller="Cart" asp-action="Remove" method="post" class="d-inline m-0">
                       <input type="hidden" name="id" value="@item.ProductId" />
                       <button type="submit" class="btn btn-danger btn-sm">Delete</button>
@@ -51,7 +50,6 @@ else
     </table>
     <p>
         <a asp-controller="Catalog" asp-action="Index" class="btn btn-secondary">← Continue Shopping</a>
-        <!-- <a asp-action="Checkout" class="btn btn-success">Checkout</a> -->
         <form asp-controller="Cart" asp-action="Checkout" method="get" class="m-0 d-inline">
             <button type="submit" class="btn btn-success">Checkout</button>
         </form>

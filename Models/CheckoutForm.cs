@@ -4,14 +4,12 @@ namespace PlantsCatalog.Models
 {
     public class CheckoutForm
     {
-        // Contact
         [Required, StringLength(100)]
         public string FullName { get; set; } = string.Empty;
 
         [Required, EmailAddress]
         public string Email { get; set; } = string.Empty;
 
-        // Address
         [Required, StringLength(120)]
         public string AddressLine1 { get; set; } = string.Empty;
 
@@ -30,7 +28,6 @@ namespace PlantsCatalog.Models
         [Required, StringLength(60)]
         public string Country { get; set; } = "Australia";
 
-        // Payment (sample/demo only)
         [Required, StringLength(100)]
         public string CardholderName { get; set; } = string.Empty;
 

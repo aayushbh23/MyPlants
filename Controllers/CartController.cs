@@ -17,16 +17,13 @@ namespace PlantsCatalog.Controllers
         public IActionResult Add(int id, int quantity)
         {
             _cartService.AddItem(id, quantity);
-            // After adding, redirect to cart overview
             return RedirectToAction("Index");
         }
 
         public IActionResult Index()
         {
             var cartItems = _cartService.GetCartItems();
-            // Calculate total
             decimal total = cartItems.Sum(item => item.LineTotal);
-            // You could use a ViewModel to pass both items and total, or use ViewData
             ViewData["CartTotal"] = total;
             return View(cartItems);
         }
@@ -37,15 +34,6 @@ namespace PlantsCatalog.Controllers
             _cartService.RemoveItem(id);
             return RedirectToAction("Index");
         }
-
-        // [HttpPost]
-        // public IActionResult Checkout()
-        // {
-        //     // Here you could implement order processing; for now, just clear the cart
-        //     _cartService.ClearCart();
-        //     TempData["Message"] = "Checkout complete! Thank you for your purchase.";
-        //     return RedirectToAction("Index");
-        // }
 
         [HttpGet]
         [Route("Checkout")]
@@ -77,7 +65,6 @@ namespace PlantsCatalog.Controllers
                 return View(form);
             }
 
-            // Demo: no real payment; pretend to process
             _cartService.ClearCart();
             TempData["OrderSuccess"] = $"Thanks {form.FullName}! Your order has been placed.";
             return RedirectToAction(nameof(Success));
@@ -87,7 +74,6 @@ namespace PlantsCatalog.Controllers
         [Route("OrderSuccess")]
         public IActionResult Success()
         {
-            // Show a dedicated confirmation page
             return View();
         }
     }

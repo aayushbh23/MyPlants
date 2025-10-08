@@ -189,8 +189,55 @@ using (var scope = app.Services.CreateScope())
                         Price = 19,
                         Description = "Round leaves, compact growth.",
                         ImageFile = "moneyplant.png"
-                    }
+                    },
 
+            new Plant { Id = 13,
+                        Name = "Boston Fern",
+                        Category = "Outdoor",
+                        Price = 31,
+                        Description = "Soft green fronds, ideal for hanging baskets.",
+                        ImageFile = "bostonfern.png"
+                    },
+
+            new Plant { Id = 14,
+                        Name = "Lavender",
+                        Category = "Flowering",
+                        Price = 105,
+                        Description = "Fragrant purple flowers, attracts pollinators.",
+                        ImageFile = "lavender.png"
+                    },
+
+            new Plant { Id = 15,
+                        Name = "Cactus",
+                        Category = "Succulent",
+                        Price = 12,
+                        Description = "Set of small cacti in assorted shapes and sizes.",
+                        ImageFile = "cactus.png"
+                    },
+
+            new Plant { Id = 16,
+                        Name = "Rose Bush",
+                        Category = "Flowering",
+                        Price = 115,
+                        Description = "Classic red roses that bloom through summer.",
+                        ImageFile = "rosebush.png"
+                    },
+
+            new Plant { Id = 17,
+                        Name = "Basil Herb",
+                        Category = "Herb",
+                        Price = 8,
+                        Description = "Fresh basil leaves perfect for cooking.",
+                        ImageFile = "basilherb.png"
+                    },
+
+            new Plant { Id = 18,
+                        Name = "Mint Herb",
+                        Category = "Herb",
+                        Price = 5,
+                        Description = "Refreshing aroma, great for tea and cocktails.",
+                        ImageFile = "mintherb.png"
+                    }
 
              );
         db.SaveChanges();

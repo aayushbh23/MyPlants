@@ -1,0 +1,105 @@
+@model PlantsCatalog.Models.CheckoutForm
+@{
+    ViewData["Title"] = "Checkout";
+}
+
+<div class="container mt-4" style="max-width: 820px;">
+    <h2 class="text-success mb-3">Checkout</h2>
+
+    <form asp-action="Checkout" method="post" novalidate>
+        @Html.AntiForgeryToken()
+        <div class="row g-4">
+            <div class="col-md-6">
+                <h5 class="mb-3">Your Details:</h5>
+                <div class="mb-3">
+                    <label asp-for="FullName" class="form-label"></label>
+                    <input asp-for="FullName" class="form-control" />
+                    <span asp-validation-for="FullName" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Email" class="form-label"></label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <h5 class="mt-4 mb-3">Shipping Address</h5>
+                <div class="mb-3">
+                    <label asp-for="AddressLine1" class="form-label"></label>
+                    <input asp-for="AddressLine1" class="form-control" />
+                    <span asp-validation-for="AddressLine1" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="AddressLine2" class="form-label"></label>
+                    <input asp-for="AddressLine2" class="form-control" />
+                    <span asp-validation-for="AddressLine2" class="text-danger"></span>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 mb-3">
+                        <label asp-for="City" class="form-label"></label>
+                        <input asp-for="City" class="form-control" />
+                        <span asp-validation-for="City" class="text-danger"></span>
+                    </div>
+                    <div class="col-sm-6 mb-3">
+                        <label asp-for="State" class="form-label"></label>
+                        <input asp-for="State" class="form-control" />
+                        <span asp-validation-for="State" class="text-danger"></span>
+                    </div>
+                    <div class="col-sm-6 mb-3">
+                        <label asp-for="Postcode" class="form-label"></label>
+                        <input asp-for="Postcode" class="form-control" />
+                        <span asp-validation-for="Postcode" class="text-danger"></span>
+                    </div>
+                    <div class="col-sm-6 mb-3">
+                        <label asp-for="Country" class="form-label"></label>
+                        <input asp-for="Country" class="form-control" />
+                        <span asp-validation-for="Country" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <h5 class="mb-3">Payment Details:</h5>
+                <div class="mb-3">
+                    <label asp-for="CardholderName" class="form-label"></label>
+                    <input asp-for="CardholderName" class="form-control" />
+                    <span asp-validation-for="CardholderName" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="CardNumber" class="form-label"></label>
+                    <input asp-for="CardNumber" class="form-control" placeholder="5353 XXXX XXXX XXXX" />
+                    <span asp-validation-for="CardNumber" class="text-danger"></span>
+                </div>
+                <div class="row">
+                    <div class="col-6 mb-3">
+                        <label asp-for="ExpiryMonth" class="form-label"></label>
+                        <input asp-for="ExpiryMonth" class="form-control" placeholder="MM" />
+                        <span asp-validation-for="ExpiryMonth" class="text-danger"></span>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <label asp-for="ExpiryYear" class="form-label"></label>
+                        <input asp-for="ExpiryYear" class="form-control" placeholder="YYYY" />
+                        <span asp-validation-for="ExpiryYear" class="text-danger"></span>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <label asp-for="CVV" class="form-label"></label>
+                        <input asp-for="CVV" class="form-control" />
+                        <span asp-validation-for="CVV" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="alert alert-info small">
+                    <strong>Note:</strong> No real payment is processed.
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-3">
+            <button type="submit" class="btn btn-success">Submit Order</button>
+            <a asp-controller="Cart" asp-action="Index" class="btn btn-outline-secondary ms-2">← Back to Cart</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

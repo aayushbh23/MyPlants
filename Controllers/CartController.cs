@@ -38,13 +38,57 @@ namespace PlantsCatalog.Controllers
             return RedirectToAction("Index");
         }
 
-        [HttpPost]
+        // [HttpPost]
+        // public IActionResult Checkout()
+        // {
+        //     // Here you could implement order processing; for now, just clear the cart
+        //     _cartService.ClearCart();
+        //     TempData["Message"] = "Checkout complete! Thank you for your purchase.";
+        //     return RedirectToAction("Index");
+        // }
+
+        [HttpGet]
+        [Route("Checkout")]
         public IActionResult Checkout()
         {
-            // Here you could implement order processing; for now, just clear the cart
+            var cart = _cartService.GetCartItems();
+            if (cart.Count == 0)
+            {
+                TempData["Message"] = "Your cart is empty. Please add items before checking out.";
+                return RedirectToAction("Index");
+            }
+            return View(new CheckoutForm { ExpiryMonth = 1, ExpiryYear = 2026 });
+        }
+
+        [HttpPost]
+        [Route("Checkout")]
+        [ValidateAntiForgeryToken]
+        public IActionResult Checkout(CheckoutForm form)
+        {
+            var cart = _cartService.GetCartItems();
+            if (cart.Count == 0)
+            {
+                TempData["Message"] = "Your cart is empty. Please add items before checking out.";
+                return RedirectToAction("Index");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(form);
+            }
+
+            // Demo: no real payment; pretend to process
             _cartService.ClearCart();
-            TempData["Message"] = "Checkout complete! Thank you for your purchase.";
-            return RedirectToAction("Index");
+            TempData["OrderSuccess"] = $"Thanks {form.FullName}! Your order has been placed.";
+            return RedirectToAction(nameof(Success));
+        }
+
+        [HttpGet]
+        [Route("OrderSuccess")]
+        public IActionResult Success()
+        {
+            // Show a dedicated confirmation page
+            return View();
         }
     }
 }

@@ -1,13 +1,11 @@
-@model int
 @{
-    ViewData["Title"] = "Not Found";
-    Layout = "_Layout";
+    ViewData["Title"] = "Page Not Found";
 }
 <div class="container text-center mt-5">
     <h1 class="display-4 text-danger">404</h1>
-    <h3 class="mb-3">Oops! — item not found.</h3>
+    <h3 class="mb-3">Oops! The page you’re looking for doesn’t exist.</h3>
     <p class="text-muted">
-        We couldn’t find a product with ID <strong>@Model</strong>.
+        It might have been moved or deleted. Please check the URL or return to the homepage.
     </p>
     <p class="mt-3">
         <a class="btn btn-outline-success" asp-controller="Home" asp-action="Index">← Back to Home</a>

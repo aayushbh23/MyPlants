@@ -73,6 +73,9 @@ app.UseRouting();
 
 app.UseSession();
 
+app.UseExceptionHandler("/Error/500");
+app.UseStatusCodePagesWithReExecute("/Error/{0}");
+
 app.UseAuthorization();
 
 app.MapControllerRoute(

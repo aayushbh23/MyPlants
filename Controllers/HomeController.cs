@@ -19,6 +19,33 @@ namespace PlantsCatalog.Controllers
             return View();
         }
 
+        [Route("About")]
+        public IActionResult About()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        [Route("Contact")]
+        public IActionResult Contact()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Route("Contact")]
+        [ValidateAntiForgeryToken]
+        public IActionResult Contact(ContactForm form)
+        {
+            if (ModelState.IsValid)
+            {
+                TempData["SuccessMessage"] = "Thank you, your message has been submitted successfully!";
+                return RedirectToAction("Contact");
+            }
+            return View(form);
+        }
+
+        [Route("Privacy")]
         public IActionResult Privacy()
         {
             return View();

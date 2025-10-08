@@ -1,4 +1,28 @@
-﻿<!DOCTYPE html>
+﻿@using System.Text.Json
+@using PlantsCatalog.Models
+@{
+    var count = 0;
+    var session = Context?.Session;
+
+    if (session is not null)
+    {
+        var cartJson = session.GetString("CartItems");
+
+        if (!string.IsNullOrEmpty(cartJson))
+        {
+            try
+            {
+                var items = JsonSerializer.Deserialize<List<CartItem>>(cartJson);
+                count = items?.Count ?? 0;
+            }
+            catch
+            {
+                count = 0;
+            }
+        }
+    }
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -10,7 +34,47 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <!-- Left side: Logo -->
+                <a class="navbar-brand d-flex align-items-center" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="~/logo.png" alt="MyPlants Logo" height="60"
+                         class="me-2 d-inline-block align-text-top" />
+                </a>
+
+                <!-- Mobile toggle -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarNav" aria-controls="navbarNav"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Right side: Nav links -->
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Catalog" asp-action="Index">Catalog</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Home" asp-action="About">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Home" asp-action="Contact">Contact</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link btn btn-outline-success ms-2" asp-controller="Cart" asp-action="Index">
+                                Cart (@count)
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand d-flex align-items-center" asp-area="" asp-controller="Home" asp-action="Index">
                     <img src="~/logo.png" alt="MyPlants Logo" height="60" class="me-2 d-inline-block align-text-top" />
@@ -32,18 +96,14 @@
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
                             <a class="nav-link btn btn-outline-success" asp-controller="Cart" asp-action="Index">
-                                Cart (@{
-                                    var count = Context.Session.GetString("CartItems") != null ?
-                                        System.Text.Json.JsonSerializer.Deserialize<List<PlantsCatalog.Models.CartItem>>(Context.Session.GetString("CartItems")).Count : 0;
-                                    @count;
-                                })
+                                Cart (@count)
                             </a>
                         </li>
                     </ul>
 
                 </div>
             </div>
-        </nav>
+        </nav> -->
     </header>
     <div class="container">
         <main role="main" class="pb-3">

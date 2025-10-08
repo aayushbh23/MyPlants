@@ -1,0 +1,45 @@
+@model PlantsCatalog.Models.ContactForm
+@{
+    ViewData["Title"] = "Contact Us";
+}
+
+<div class="container mt-4" style="max-width:600px;">
+    <h2 class="text-success mb-3">Contact Us</h2>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success" role="alert">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    <form asp-action="Contact" method="post" novalidate>
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Email" class="form-label"></label>
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Message" class="form-label"></label>
+            <textarea asp-for="Message" class="form-control" rows="5"></textarea>
+            <span asp-validation-for="Message" class="text-danger"></span>
+        </div>
+        <p class="text-muted">
+            By submitting this form, you agree that we may store your message for support purposes.
+            Learn more about our <a asp-controller="Home" asp-action="Privacy" class="text-success fw-bold text-decoration-underline">Privacy Policy</a>.
+        </p>
+        <button type="submit" class="btn btn-success">Send Message</button>
+        <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary ms-2">← Back to Home</a>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

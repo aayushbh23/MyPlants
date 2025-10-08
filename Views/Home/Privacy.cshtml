@@ -1,6 +1,23 @@
 ﻿@{
     ViewData["Title"] = "Privacy Policy";
 }
-<h1>@ViewData["Title"]</h1>
+<div class="container mt-5">
+    <h2 class="text-success mb-4">Privacy Policy</h2>
+    <p>
+        At <strong>MyPlants</strong>, we respect your privacy and are committed to protecting your personal information.
+        We only collect the data necessary to provide and improve our services such as your name, email address and order details,
+        when you interact with our website. This information is used to process orders, respond to inquiries and enhance your overall experience.
+    </p>
 
-<p>This is site's privacy policy.</p>
+    <p>
+        We do not share your personal information with third parties except when required by law or to complete transactions
+        (for example, with payment providers or delivery services). We use secure methods to store your data and take reasonable steps
+        to protect it from unauthorized access.
+    </p>
+
+    <p>
+        By using our website, you agree to this privacy policy. If you have any questions or concerns about how your information is handled,
+        please contact us through our <a asp-controller="Home" asp-action="Contact" class="text-success fw-bold text-decoration-underline">Contact</a> page.
+    </p>
+    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary ms-2">← Back to Home</a>
+</div>

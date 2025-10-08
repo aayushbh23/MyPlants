@@ -1,63 +1,17 @@
-// using PlantsCatalog.Services;
-
-// var builder = WebApplication.CreateBuilder(args);
-
-// builder.Services.AddControllersWithViews();
-// builder.Services.AddSingleton<IPlantService, InMemoryPlantService>();
-
-// var app = builder.Build();
-
-// if (!app.Environment.IsDevelopment())
-// {
-//     app.UseExceptionHandler("/Home/Error");
-//     app.UseHsts();
-// }
-// app.UseHttpsRedirection();
-// app.UseStaticFiles();
-
-// app.UseRouting();
-
-// app.UseAuthorization();
-
-// app.MapControllerRoute(
-//     name: "default",
-//     pattern: "{controller=Home}/{action=Index}/{id?}");
-
-// app.Run();
-
-
 using Microsoft.EntityFrameworkCore;
 using PlantsCatalog.Models;
 using PlantsCatalog.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// --- DB: SQLite ---
 builder.Services.AddDbContext<PlantsCatalogDBContext>(opts =>
     opts.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-
-// // --- Repos/Cart/Session ---
-// builder.Services.AddHttpContextAccessor();
-// builder.Services.AddSession(options =>
-// {
-//     options.Cookie.Name = ".PhoneStore.Session";
-//     options.Cookie.HttpOnly = true;
-//     options.Cookie.IsEssential = true;
-//     options.IdleTimeout = TimeSpan.FromMinutes(30);
-// });
-
-
-builder.Services.AddDistributedMemoryCache();  // needed for session
-builder.Services.AddSession();                // register session services
-
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession();
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpsRedirection(o => o.HttpsPort = 5001);
-
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<ICartService, SessionCartService>();
 builder.Services.AddScoped<IPlantService, EfPlantService>();
-
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
@@ -68,29 +22,21 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
 app.UseSession();
-
 app.UseExceptionHandler("/Error/500");
 app.UseStatusCodePagesWithReExecute("/Error/{0}");
-
 app.UseAuthorization();
-
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-
-// // Ensure database is created and seed initial data
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<PlantsCatalogDBContext>();
     db.Database.EnsureDeleted();
-    db.Database.EnsureCreated();  // Automatically create DB schema if not exists
+    db.Database.EnsureCreated();
 
-    // Seed sample products if database is empty
     if (!db.Plants.Any())
     {
         db.Plants.AddRange(

@@ -3,6 +3,7 @@ using PlantsCatalog.Services;
 
 namespace PlantsCatalog.ViewComponents
 {
+    // Renders a category dropdown/menu for filtering plants
     public class CategoryMenuViewComponent : ViewComponent
     {
         private readonly IPlantService _plantService;
@@ -14,6 +15,7 @@ namespace PlantsCatalog.ViewComponents
 
         public IViewComponentResult Invoke(string? selected)
         {
+            // Fetch distinct, alphabetically sorted category names
             var categories = _plantService.GetAllPlants()
                 .Select(p => p.Category)
                 .Where(c => !string.IsNullOrWhiteSpace(c))
@@ -21,9 +23,10 @@ namespace PlantsCatalog.ViewComponents
                 .OrderBy(c => c)
                 .ToList();
 
+            // Mark which category is currently active
             ViewBag.SelectedCategory = selected;
+
             return View(categories);
         }
     }
 }
-

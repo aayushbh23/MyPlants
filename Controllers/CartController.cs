@@ -1,13 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
 using PlantsCatalog.Services;
 using PlantsCatalog.Models;
-using System.Linq;
 
 namespace PlantsCatalog.Controllers
 {
+    // Handles all shopping cart and checkout operations
     public class CartController : Controller
     {
         private readonly ICartService _cartService;
+
         public CartController(ICartService cartService)
         {
             _cartService = cartService;
@@ -23,8 +24,7 @@ namespace PlantsCatalog.Controllers
         public IActionResult Index()
         {
             var cartItems = _cartService.GetCartItems();
-            decimal total = cartItems.Sum(item => item.LineTotal);
-            ViewData["CartTotal"] = total;
+            ViewData["CartTotal"] = cartItems.Sum(item => item.LineTotal);
             return View(cartItems);
         }
 
@@ -40,11 +40,15 @@ namespace PlantsCatalog.Controllers
         public IActionResult Checkout()
         {
             var cart = _cartService.GetCartItems();
+
+            // Prevent checkout when the cart is empty
             if (cart.Count == 0)
             {
                 TempData["Message"] = "Your cart is empty. Please add items before checking out.";
                 return RedirectToAction("Index");
             }
+
+            // Pre-fill expiry date with a future default value
             return View(new CheckoutForm { ExpiryMonth = 1, ExpiryYear = 2026 });
         }
 
@@ -54,17 +58,18 @@ namespace PlantsCatalog.Controllers
         public IActionResult Checkout(CheckoutForm form)
         {
             var cart = _cartService.GetCartItems();
+
             if (cart.Count == 0)
             {
                 TempData["Message"] = "Your cart is empty. Please add items before checking out.";
                 return RedirectToAction("Index");
             }
 
+            // Return user to form if validation fails
             if (!ModelState.IsValid)
-            {
                 return View(form);
-            }
 
+            // On success — clear cart and show confirmation
             _cartService.ClearCart();
             TempData["OrderSuccess"] = $"Thanks {form.FullName}! Your order has been placed.";
             return RedirectToAction(nameof(Success));

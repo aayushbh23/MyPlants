@@ -1,6 +1,6 @@
-using PlantsCatalog.Models;
 namespace PlantsCatalog.Models
 {
+    // Represents a single item in the user's shopping cart
     public class CartItem
     {
         public int ProductId { get; set; }
@@ -8,6 +8,7 @@ namespace PlantsCatalog.Models
         public decimal Price { get; set; }
         public int Quantity { get; set; }
 
+        // Automatically calculates total cost for this item
         public decimal LineTotal => Price * Quantity;
     }
 }

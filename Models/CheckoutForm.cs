@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PlantsCatalog.Models
 {
+    // Represents user input during checkout with validation rules
     public class CheckoutForm
     {
         [Required, StringLength(100)]
@@ -32,7 +33,7 @@ namespace PlantsCatalog.Models
         public string CardholderName { get; set; } = string.Empty;
 
         [Required]
-        [RegularExpression(@"^\d{16}$")]
+        [RegularExpression(@"^\d{16}$")] // Must be exactly 16 digits
         public string CardNumber { get; set; } = string.Empty;
 
         [Required, Range(1, 12)]
@@ -41,7 +42,7 @@ namespace PlantsCatalog.Models
         [Required, Range(2024, 2035)]
         public int ExpiryYear { get; set; }
 
-        [Required, StringLength(4, MinimumLength = 3)]
+        [Required, StringLength(4, MinimumLength = 3)] // 3–4 digit CVV
         public string CVV { get; set; } = string.Empty;
     }
 }

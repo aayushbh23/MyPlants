@@ -4,6 +4,7 @@ using System.Text.Json;
 
 namespace PlantsCatalog.Services
 {
+    // Manages cart data stored in user session
     public class SessionCartService : ICartService
     {
         private const string SessionKey = "CartItems";
@@ -20,22 +21,25 @@ namespace PlantsCatalog.Services
         {
             var cart = GetCartItems();
             var existing = cart.FirstOrDefault(ci => ci.ProductId == productId);
+
             if (existing != null)
             {
-                existing.Quantity += quantity;
+                existing.Quantity += quantity; // Increase if already in cart
             }
             else
             {
                 var product = _plantService.GetById(productId);
-                if (product == null) return;
+                if (product == null) return; // Ignore invalid product IDs
 
-                cart.Add(new CartItem {
+                cart.Add(new CartItem
+                {
                     ProductId = product.Id,
                     Name = product.Name,
                     Price = product.Price,
                     Quantity = quantity
                 });
             }
+
             SaveCart(cart);
         }
 
@@ -51,17 +55,15 @@ namespace PlantsCatalog.Services
             var session = _httpContextAccessor.HttpContext?.Session;
             if (session == null) return new List<CartItem>();
 
-            string? cartJson = session.GetString(SessionKey);
-            if (string.IsNullOrEmpty(cartJson))
-            {
-                return new List<CartItem>();
-            }
-            return JsonSerializer.Deserialize<List<CartItem>>(cartJson) ?? new List<CartItem>();
+            var cartJson = session.GetString(SessionKey);
+            return string.IsNullOrEmpty(cartJson)
+                ? new List<CartItem>()
+                : JsonSerializer.Deserialize<List<CartItem>>(cartJson) ?? new List<CartItem>();
         }
-        public void ClearCart()
-        {
-            SaveCart(new List<CartItem>());
-        }
+
+        public void ClearCart() => SaveCart(new List<CartItem>());
+
+        // Helper to persist the current cart state into session
         private void SaveCart(List<CartItem> cart)
         {
             var session = _httpContextAccessor.HttpContext?.Session;

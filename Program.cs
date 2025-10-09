@@ -6,13 +6,30 @@ using PlantsCatalog.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Configuration.AddJsonFile("dbConfig.json", optional: false, reloadOnChange: true);
+
 var provider = builder.Configuration["Database:Provider"]?.Trim() ?? "SqlServer";
 builder.Services.AddDbContext<PlantsCatalogDBContext>(options =>
 {
     if (provider.Equals("Sqlite", StringComparison.OrdinalIgnoreCase))
         options.UseSqlite(builder.Configuration.GetConnectionString("Sqlite"));
-    else
-        options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"));
+    else{
+        var username = builder.Configuration["DbCredentials:Username"];
+        var password = builder.Configuration["DbCredentials:Password"];
+        var baseConn = builder.Configuration.GetConnectionString("SqlServer");
+
+        if (string.IsNullOrWhiteSpace(baseConn))
+            throw new InvalidOperationException("ConnectionStrings:SqlServer is missing in appsettings.json.");
+
+        if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+            throw new InvalidOperationException("DbCredentials:Username or Password missing in dbConfig.json.");
+
+        var finalConn = baseConn
+            .Replace("{USERNAME}", username, StringComparison.Ordinal)
+            .Replace("{PASSWORD}", password, StringComparison.Ordinal);
+
+        options.UseSqlServer(finalConn);
+    }
 });
 
 builder.Services.AddDistributedMemoryCache();
@@ -68,42 +85,42 @@ using (var scope = app.Services.CreateScope())
 
             new Plant { Name = "Monstera Deliciosa",
                         Category = "Indoor",
-                        Price = 30,
+                        Price = 13.99M,
                         Description = "Iconic split leaves. Easy indoor plant.",
                         ImageFile = "monstera.png"
                     },
 
             new Plant { Name = "Snake Plant (Sansevieria)",
                         Category = "Succulent",
-                        Price = 20,
+                        Price = 19.99M,
                         Description = "Hardy, low-light tolerant.",
                         ImageFile = "snake.png"
                     },
 
             new Plant { Name = "Fiddle Leaf Fig",
                         Category = "Succulent",
-                        Price = 40,
+                        Price = 39.50M,
                         Description = "Statement plant with violin-shaped leaves.",
                         ImageFile = "fiddleleaf.png"
                     },
 
             new Plant { Name = "ZZ Plant (Zamioculcas)",
                         Category = "Outdoor",
-                        Price = 25,
+                        Price = 18.50M,
                         Description = "Glossy leaves, drought tolerant.",
                         ImageFile = "zzplant.png"
                     },
 
             new Plant { Name = "Pothos Golden",
                         Category = "Indoor",
-                        Price = 15,
+                        Price = 29.99M,
                         Description = "Fast-growing trailing plant.",
                         ImageFile = "pothos.png"
                     },
 
             new Plant { Name = "Peace Lily",
                         Category = "Indoor",
-                        Price = 23,
+                        Price = 22.49M,
                         Description = "Elegant white blooms, air-purifying.",
                         ImageFile = "peacelily.png"
                     },

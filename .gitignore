@@ -63,3 +63,8 @@ obj/*
 
 # Database file
 MyPlants.db
+MyPlants.db-shm
+MyPlants.db-wal
+
+# VS bin folder
+.vs/

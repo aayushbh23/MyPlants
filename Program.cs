@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
 using PlantsCatalog.Models;
 using PlantsCatalog.Services;
 
@@ -194,5 +196,9 @@ using (var scope = app.Services.CreateScope())
         db.SaveChanges();
     }
 }
+
+var defaultCulture = new CultureInfo("en-AU");
+CultureInfo.DefaultThreadCurrentCulture = defaultCulture;
+CultureInfo.DefaultThreadCurrentUICulture = defaultCulture;
 
 app.Run();

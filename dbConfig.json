@@ -1,8 +1,8 @@
 {
   "DbCredentials": {
-    "Server": "localhost,1433",
+    "Server": "(localdb)\\MSSQLLocalDB",
     "Database": "MyPlantsDb",
-    "Username": "sa",
+    "Username": "",
     "Password": ""
   }
 }

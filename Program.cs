@@ -18,6 +18,8 @@ builder.Services.AddDbContext<PlantsCatalogDBContext>(options =>
     }
     else
     {
+        var server = builder.Configuration["DbCredentials:Server"];
+        var database = builder.Configuration["DbCredentials:Database"];
         var username = builder.Configuration["DbCredentials:Username"];
         var password = builder.Configuration["DbCredentials:Password"];
         var baseConn = builder.Configuration.GetConnectionString("SqlServer");
@@ -25,10 +27,12 @@ builder.Services.AddDbContext<PlantsCatalogDBContext>(options =>
         if (string.IsNullOrWhiteSpace(baseConn))
             throw new InvalidOperationException("ConnectionStrings:SqlServer is missing in appsettings.json.");
 
-        if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
-            throw new InvalidOperationException("DbCredentials:Username or Password missing in dbConfig.json.");
+        if (string.IsNullOrWhiteSpace(server) || string.IsNullOrWhiteSpace(database) || string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+            throw new InvalidOperationException("DbCredentials are missing in dbConfig.json.");
 
         var finalConn = baseConn
+            .Replace("{SERVER}", server, StringComparison.Ordinal)
+            .Replace("{DATABASE}", database, StringComparison.Ordinal)
             .Replace("{USERNAME}", username, StringComparison.Ordinal)
             .Replace("{PASSWORD}", password, StringComparison.Ordinal);
 
@@ -76,6 +80,16 @@ using (var scope = app.Services.CreateScope())
     }
     else
     {
+        // For SQL Server: create DB and tables directly, before migrations
+        if (db.Database.EnsureCreated())
+        {
+            Console.WriteLine("Database and tables created successfully.");
+        }
+        else
+        {
+            Console.WriteLine("Database already exists.");
+        }
+
         // SQL Server may not be ready immediately. Retry briefly.
         for (int i = 0; i < 5; i++)
         {

@@ -1,5 +1,7 @@
 {
   "DbCredentials": {
+    "Server": "localhost,1433",
+    "Database": "MyPlantsDb",
     "Username": "sa",
     "Password": ""
   }

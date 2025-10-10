@@ -27,8 +27,8 @@ builder.Services.AddDbContext<PlantsCatalogDBContext>(options =>
         if (string.IsNullOrWhiteSpace(baseConn))
             throw new InvalidOperationException("ConnectionStrings:SqlServer is missing in appsettings.json.");
 
-        if (string.IsNullOrWhiteSpace(server) || string.IsNullOrWhiteSpace(database) || string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
-            throw new InvalidOperationException("DbCredentials are missing in dbConfig.json.");
+        // if (string.IsNullOrWhiteSpace(server) || string.IsNullOrWhiteSpace(database) || string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+        //     throw new InvalidOperationException("DbCredentials are missing in dbConfig.json.");
 
         var finalConn = baseConn
             .Replace("{SERVER}", server, StringComparison.Ordinal)
@@ -138,3 +138,4 @@ CultureInfo.DefaultThreadCurrentCulture = defaultCulture;
 CultureInfo.DefaultThreadCurrentUICulture = defaultCulture;
 
 app.Run();
+
